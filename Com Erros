@@ -1,0 +1,115 @@
+Aqui está um exemplo de código Kotlin utilizando `RecyclerView` com `Adapter`, contendo diversos erros propositais. O layout contém inputs para aumentar a complexidade. Sua tarefa será encontrar e resolver os erros. Não apontarei onde estão os erros, como solicitado.
+
+### Código Kotlin (Adapter e Activity) (MainActivity.kt)
+
+package com.example.recyclerinput
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import android.widget.EditText
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: CustomAdapter
+    private lateinit var inputField: EditText
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        inputField = findViewById<EditText>(R.id.inputField)
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        adapter = CustomAdapter(getSampleData())
+        recyclerView.adapter = adapter
+
+        inputField.setText("Initial Input") // set an initial text
+    }
+
+    private fun getSampleData(): List<String> {
+        return listOf("Item 1", "Item 2", "Item 3", "Item 4", "Item 5")
+    }
+}
+
+### Adapter.kt
+
+package com.example.recyclerinput
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.EditText
+import androidx.recyclerview.widget.RecyclerView
+
+class CustomAdapter(private val items: List<String>) :
+    RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val textView: TextView = view.findViewById(R.id.textView)
+        val editText: EditText = view.findViewById(R.id.editText)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_view, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = items[position]
+        holder.textView.text = item
+        holder.editText.setText("") // clear any previous text
+    }
+
+    override fun getItemCount(): Int {
+        return items.size
+    }
+}
+
+
+### Layout do Activity (activity_main.xml)
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/inputField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter text" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+</LinearLayout>
+
+### Layout do Item (item_view.xml)
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sample Text" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter item-specific text" />
+</LinearLayout>
